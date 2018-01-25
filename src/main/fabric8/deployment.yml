@@ -1,0 +1,34 @@
+spec:
+  template:
+    spec:
+        containers:
+        - 
+          volumeMounts:
+          - name: config-volume
+            mountPath: /deployments/config
+          readinessProbe:
+            httpGet:
+              path: "/health"
+              port: 8086
+            initialDelaySeconds: 10
+          livenessProbe:
+            httpGet:
+              path: "/health"
+              port: 8086
+            initialDelaySeconds: 180
+          ports:
+          - containerPort: 8086
+            name: mgmt
+          - containerPort: 8080
+            name: web
+          resources:
+            requests:
+              cpu: "0.2"
+#              memory: 256Mi
+            limits:
+              cpu: "1.0"
+#              memory: 256Mi
+        volumes:
+        - name: config-volume
+          configMap:
+            name: techlab-fis-configmap-config
